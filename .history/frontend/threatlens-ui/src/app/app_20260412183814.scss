@@ -1,0 +1,14 @@
+.app-header {
+  position: absolute; 
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;        
+}
+
+.logo {
+  height: 80px;
+  width: auto;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.7));
+}

@@ -1,0 +1,30 @@
+<div class="page">
+  <a routerLink="/">← Back</a>
+
+  <h1>URL Phishing Analyzer</h1>
+
+  <input
+    [(ngModel)]="url"
+    placeholder="Enter URL"
+  />
+
+  <button (click)="analyze()" [disabled]="loading">
+    {{ loading ? 'Analyzing...' : 'Analyze URL' }}
+  </button>
+
+  <p *ngIf="error">{{ error }}</p>
+
+  <div *ngIf="result as r">
+    <h2>Result</h2>
+
+    <p><strong>Hostname:</strong> {{ r.hostname }}</p>
+    <p><strong>HTTPS:</strong> {{ r.usesHttps }}</p>
+    <p><strong>IP Address:</strong> {{ r.isIpAddress }}</p>
+    <p><strong>Risk Score:</strong> {{ r.riskScore }}/100</p>
+
+    <h3>Findings</h3>
+    <ul>
+      <li *ngFor="let f of r.findings">{{ f }}</li>
+    </ul>
+  </div>
+</div>

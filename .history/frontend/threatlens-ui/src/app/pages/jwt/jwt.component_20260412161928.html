@@ -1,0 +1,40 @@
+<div class="jwt-page">
+  <h1>JWT Inspector</h1>
+  <p>Paste a JWT below to decode and analyze it.</p>
+
+  <textarea
+    [(ngModel)]="token"
+    rows="8"
+    placeholder="Paste JWT here"
+  ></textarea>
+
+  <button (click)="analyzeToken()" [disabled]="loading">
+    {{ loading ? 'Analyzing...' : 'Analyze Token' }}
+  </button>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <div class="results" *ngIf="result">
+    <h2>Analysis Result</h2>
+
+    <p><strong>Valid Format:</strong> {{ result.validFormat }}</p>
+    <p><strong>Algorithm:</strong> {{ result.algorithm || 'N/A' }}</p>
+
+    <div *ngIf="result.header">
+      <h3>Header</h3>
+      <pre>{{ result.header | json }}</pre>
+    </div>
+
+    <div *ngIf="result.payload">
+      <h3>Payload</h3>
+      <pre>{{ result.payload | json }}</pre>
+    </div>
+
+    <div *ngIf="result.findings.length">
+      <h3>Findings</h3>
+      <ul>
+        <li *ngFor="let finding of result.findings">{{ finding }}</li>
+      </ul>
+    </div>
+  </div>
+</div>

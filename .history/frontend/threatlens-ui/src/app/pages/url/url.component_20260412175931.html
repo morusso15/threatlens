@@ -1,0 +1,85 @@
+<div class="page">
+  <a routerLink="/" class="back-link">← Dashboard</a>
+
+  <h1>URL Phishing Analyzer</h1>
+  <p class="subtitle">
+    Analyze suspicious URLs for phishing indicators such as insecure protocol,
+    deceptive keywords, IP-based hosts, and excessive subdomain depth.
+  </p>
+
+  <div class="panel input-panel">
+    <h2>URL Input</h2>
+    <p>Paste a URL below to inspect it for common phishing patterns.</p>
+
+    <div class="input-row">
+      <input
+        [(ngModel)]="url"
+        placeholder="Enter URL"
+      />
+
+      <button type="button" (click)="analyze()" [disabled]="loading">
+        {{ loading ? 'Analyzing...' : 'Analyze URL' }}
+      </button>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </div>
+
+  <div *ngIf="result as r" class="result-grid">
+    <div class="panel result-panel">
+      <h2>Summary</h2>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <span class="label">Hostname</span>
+          <strong>{{ r.hostname || 'N/A' }}</strong>
+        </div>
+
+        <div class="summary-card">
+          <span class="label">HTTPS</span>
+          <strong>{{ r.usesHttps ? 'Yes' : 'No' }}</strong>
+        </div>
+
+        <div class="summary-card">
+          <span class="label">IP Address</span>
+          <strong>{{ r.isIpAddress ? 'Yes' : 'No' }}</strong>
+        </div>
+
+        <div class="summary-card">
+          <span class="label">Risk Score</span>
+          <div
+            class="risk-score"
+            [ngClass]="{
+              'risk-low': r.riskScore < 30,
+              'risk-medium': r.riskScore >= 30 && r.riskScore < 60,
+              'risk-high': r.riskScore >= 60
+            }"
+          >
+            {{ r.riskScore }}/100
+          </div>
+        </div>
+      </div>
+
+      <div class="keyword-list" *ngIf="r.suspiciousKeywords.length > 0">
+        <span class="keyword-badge" *ngFor="let keyword of r.suspiciousKeywords">
+          {{ keyword }}
+        </span>
+      </div>
+    </div>
+
+    <div class="panel findings-panel">
+      <h2>Findings</h2>
+
+      <div class="finding-list" *ngIf="r.findings.length > 0; else noFindings">
+        <div class="finding-item" *ngFor="let finding of r.findings">
+          <span class="finding-dot"></span>
+          <span>{{ finding }}</span>
+        </div>
+      </div>
+
+      <ng-template #noFindings>
+        <p class="empty-state">No phishing indicators were detected.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

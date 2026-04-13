@@ -1,0 +1,6 @@
+node_modules/
+.angular/
+.history/
+dist/
+.vscode/
+.env

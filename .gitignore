@@ -1,0 +1,63 @@
+# =========================
+# GENERAL
+# =========================
+.DS_Store
+Thumbs.db
+*.log
+
+# =========================
+# ENV / SECRETS
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# IDE / EDITOR
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# HISTORY (IMPORTANT - you committed this already)
+# =========================
+.history/
+
+# =========================
+# NODE (Angular frontend)
+# =========================
+node_modules/
+frontend/**/node_modules/
+
+.angular/
+frontend/**/.angular/
+
+dist/
+frontend/**/dist/
+
+# =========================
+# ANGULAR CACHE / BUILD
+# =========================
+frontend/**/out-tsc/
+
+# =========================
+# JAVA / SPRING BOOT
+# =========================
+*.class
+*.jar
+*.war
+*.ear
+
+# Gradle
+.gradle/
+build/
+backend/**/build/
+
+# =========================
+# OS / TEMP FILES
+# =========================
+*.tmp
+*.temp
+*.cache

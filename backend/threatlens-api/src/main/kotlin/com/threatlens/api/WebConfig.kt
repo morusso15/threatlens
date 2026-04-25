@@ -8,7 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebConfig : WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/api/**")
-            .allowedOrigins("http://localhost:4200")
+            .allowedOrigins(
+                "http://localhost:4200",
+                "https://threatlens-self.vercel.app"
+                )
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
     }
 }

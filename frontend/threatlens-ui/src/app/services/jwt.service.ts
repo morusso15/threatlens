@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface JwtAnalyzeResponse {
   validFormat: boolean;
@@ -22,7 +23,7 @@ export interface JwtAnalyzeResponse {
 })
 export class JwtService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/jwt';
+  private baseUrl = `${environment.apiUrl}/api/jwt`;
 
   analyzeToken(token: string, secret?: string): Observable<JwtAnalyzeResponse> {
     return this.http.post<JwtAnalyzeResponse>(`${this.baseUrl}/analyze`, {

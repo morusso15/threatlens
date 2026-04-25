@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface UrlAnalyzeResponse {
   originalUrl: string;
@@ -18,7 +19,7 @@ export interface UrlAnalyzeResponse {
 })
 export class UrlService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/url';
+  private baseUrl = `${environment.apiUrl}/api/url`;
 
   analyze(url: string): Observable<UrlAnalyzeResponse> {
     return this.http.post<UrlAnalyzeResponse>(`${this.baseUrl}/analyze`, { url });

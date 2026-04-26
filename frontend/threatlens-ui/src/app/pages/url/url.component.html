@@ -1,85 +1,116 @@
-<div class="page">
-  <a routerLink="/" class="back-link">← Dashboard</a>
+<div class="url-shell">
+  <header class="topbar">
+    <a routerLink="/" class="back-link">← Dashboard</a>
+    <div class="topbar-badge">ThreatLens</div>
+  </header>
 
-  <h1>URL Phishing Analyzer</h1>
-  <p class="subtitle">
-    Analyze suspicious URLs for phishing indicators such as insecure protocol,
-    deceptive keywords, IP-based hosts, and excessive subdomain depth.
-  </p>
-
-  <div class="panel input-panel">
-    <h2>URL Input</h2>
-    <p>Paste a URL below to inspect it for common phishing patterns.</p>
-
-    <div class="input-row">
-      <input
-        [(ngModel)]="url"
-        placeholder="Enter URL"
-      />
-
-      <button type="button" (click)="analyze()" [disabled]="loading">
-        {{ loading ? 'Analyzing...' : 'Analyze URL' }}
-      </button>
+  <section class="hero">
+    <div>
+      <p class="eyebrow">URL Analysis</p>
+      <h1>URL Phishing Analyzer</h1>
+      <p class="hero-text">
+        Analyze suspicious URLs for phishing indicators such as insecure protocol,
+        deceptive keywords, IP-based hosts, and excessive subdomain depth.
+      </p>
     </div>
+  </section>
 
-    <p class="error" *ngIf="error">{{ error }}</p>
-  </div>
+  <section class="content-grid single">
+    <div class="panel input-panel">
+      <div class="panel-header">
+        <h2>URL Input</h2>
+        <p>Paste a URL below to inspect it for common phishing patterns.</p>
+      </div>
 
-  <div *ngIf="result as r" class="result-grid">
-    <div class="panel result-panel">
-      <h2>Summary</h2>
+      <div class="url-row">
+        <input [(ngModel)]="url" placeholder="Enter URL" />
 
-      <div class="summary-grid">
-        <div class="summary-card">
-          <span class="label">Hostname</span>
-          <strong>{{ r.hostname || 'N/A' }}</strong>
+        <button type="button" class="primary-btn" (click)="analyze()" [disabled]="loading">
+          {{ loading ? 'Analyzing...' : 'Analyze URL' }}
+        </button>
+      </div>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+    </div>
+  </section>
+
+  <section class="results-section" *ngIf="result as r">
+    <div class="result-grid">
+      <div class="panel result-panel">
+        <div class="panel-header">
+          <h2>Summary</h2>
+          <p>Quick readout of the analyzed URL.</p>
         </div>
 
-        <div class="summary-card">
-          <span class="label">HTTPS</span>
-          <strong>{{ r.usesHttps ? 'Yes' : 'No' }}</strong>
-        </div>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <span class="label">Hostname</span>
+            <strong>{{ r.hostname || 'N/A' }}</strong>
+          </div>
 
-        <div class="summary-card">
-          <span class="label">IP Address</span>
-          <strong>{{ r.IpAddress ? 'Yes' : 'No' }}</strong>
-        </div>
+          <div class="summary-card">
+            <span class="label">HTTPS</span>
+            <strong>{{ r.usesHttps ? 'Yes' : 'No' }}</strong>
+          </div>
 
-        <div class="summary-card">
-          <span class="label">Risk Score</span>
-          <div
-            class="risk-score"
-            [ngClass]="{
-              'risk-low': r.riskScore < 30,
-              'risk-medium': r.riskScore >= 30 && r.riskScore < 60,
-              'risk-high': r.riskScore >= 60
-            }"
-          >
-            {{ r.riskScore }}/100
+          <div class="summary-card">
+            <span class="label">IP Address</span>
+            <strong>{{ r.IpAddress ? 'Yes' : 'No' }}</strong>
+          </div>
+
+          <div class="summary-card">
+            <span class="label">Risk Score</span>
+            <div class="risk-progress">
+              <div class="risk-progress-top">
+                <strong
+                  [ngClass]="{
+                    'risk-low': r.riskScore < 30,
+                    'risk-medium': r.riskScore >= 30 && r.riskScore < 60,
+                    'risk-high': r.riskScore >= 60
+                  }"
+                >
+                  {{ r.riskScore }}/100
+                </strong>
+              </div>
+
+              <div class="risk-bar">
+                <div
+                  class="risk-fill"
+                  [style.width.%]="r.riskScore"
+                  [ngClass]="{
+                    'risk-fill-low': r.riskScore < 30,
+                    'risk-fill-medium': r.riskScore >= 30 && r.riskScore < 60,
+                    'risk-fill-high': r.riskScore >= 60
+                  }"
+                ></div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="keyword-list" *ngIf="r.suspiciousKeywords.length > 0">
-        <span class="keyword-badge" *ngFor="let keyword of r.suspiciousKeywords">
-          {{ keyword }}
-        </span>
-      </div>
-    </div>
-
-    <div class="panel findings-panel">
-      <h2>Findings</h2>
-
-      <div class="finding-list" *ngIf="r.findings.length > 0; else noFindings">
-        <div class="finding-item" *ngFor="let finding of r.findings">
-          <span class="finding-dot"></span>
-          <span>{{ finding }}</span>
+        <div class="keyword-list" *ngIf="r.suspiciousKeywords.length > 0">
+          <span class="keyword-badge" *ngFor="let keyword of r.suspiciousKeywords">
+            {{ keyword }}
+          </span>
         </div>
       </div>
 
-      <ng-template #noFindings>
-        <p class="empty-state">No phishing indicators were detected.</p>
-      </ng-template>
+      <div class="panel findings-panel">
+        <div class="panel-header">
+          <h2>Findings</h2>
+          <p>Key observations generated from the URL analysis.</p>
+        </div>
+
+        <div class="finding-list" *ngIf="r.findings.length > 0; else noFindings">
+          <div class="finding-item" *ngFor="let finding of r.findings">
+            <span class="finding-dot"></span>
+            <span>{{ finding }}</span>
+          </div>
+        </div>
+
+        <ng-template #noFindings>
+          <p class="muted">No phishing indicators were detected.</p>
+        </ng-template>
+      </div>
     </div>
-  </div>
+  </section>
 </div>

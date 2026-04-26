@@ -27,7 +27,7 @@ export class HomeComponent {
       title: 'Finding Translator',
       description: 'Rewrite security findings for executives, technicians, and other audiences.',
       route: '/translator',
-      status: 'Planned'
+      status: 'Available'
     }
   ];
 }

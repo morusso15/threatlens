@@ -40,11 +40,16 @@
 }
 
 .eyebrow {
-  color: #60a5fa;
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.7);
+  color: #93c5fd;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
 }
 
 .hero h1 {

@@ -1,0 +1,132 @@
+<div class="translator-shell">
+  <header class="topbar">
+    <a routerLink="/" class="back-link">← Dashboard</a>
+    <div class="topbar-badge">ThreatLens</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Finding Translation</p>
+      <h1>Finding Translator</h1>
+      <p class="hero-text">
+        Rewrite security findings for executives, developers, and analysts with clear impact,
+        action, and explanation.
+      </p>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <div class="panel input-panel">
+      <div class="panel-header">
+        <h2>Finding Input</h2>
+        <p>Paste a CVE, scanner finding, or pentest note below.</p>
+      </div>
+
+      <div class="secret-group">
+        <label for="audience">Audience</label>
+        <select id="audience" [(ngModel)]="audience">
+          <option value="executive">Executive</option>
+          <option value="developer">Developer</option>
+          <option value="analyst">Analyst</option>
+        </select>
+      </div>
+
+      <textarea
+        [(ngModel)]="finding"
+        rows="10"
+        placeholder="Paste security finding here"
+      ></textarea>
+
+      <div class="actions">
+        <button type="button" class="primary-btn" (click)="analyze()" [disabled]="loading">
+          {{ loading ? 'Translating...' : 'Translate Finding' }}
+        </button>
+
+        <button type="button" class="ghost-btn" (click)="clear()" [disabled]="loading">
+          Clear
+        </button>
+      </div>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+    </div>
+
+    <div class="panel summary-panel">
+      <div class="panel-header">
+        <h2>Translation</h2>
+        <p>Quick readout of the translated finding.</p>
+      </div>
+
+      <ng-container *ngIf="result as r; else emptyState">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <span class="label">Audience</span>
+            <strong>{{ r.audience | titlecase }}</strong>
+          </div>
+
+          <div class="summary-card">
+            <span class="label">Risk</span>
+            <strong>{{ r.riskLevel }}</strong>
+          </div>
+
+          <div class="summary-card">
+            <span class="label">Key Terms</span>
+            <strong>{{ r.keyTerms.length }}</strong>
+          </div>
+        </div>
+
+        <div class="claim-summary">
+          <div class="claim-row">
+            <span>Title</span>
+            <strong>{{ r.title }}</strong>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <p>No translation yet. Paste a finding and choose an audience.</p>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+
+  <section class="results-section" *ngIf="result as r">
+    <div class="panel translated-panel">
+      <div class="panel-header">
+        <p class="eyebrow small">Translated Finding</p>
+        <h2>{{ r.title }}</h2>
+        <p>All sections start open. Collapse sections as you review.</p>
+      </div>
+
+      <div class="accordion-list">
+        <details open>
+          <summary>Summary</summary>
+          <p>{{ r.summary }}</p>
+        </details>
+
+        <details open>
+          <summary>Impact</summary>
+          <p>{{ r.impact }}</p>
+        </details>
+
+        <details open>
+          <summary>Recommended Action</summary>
+          <p>{{ r.recommendedAction }}</p>
+        </details>
+
+        <details open>
+          <summary>Explanation</summary>
+          <p>{{ r.explanation }}</p>
+        </details>
+
+        <details open *ngIf="r.keyTerms.length">
+          <summary>Key Terms</summary>
+
+          <div class="tag-list">
+            <span *ngFor="let term of r.keyTerms">{{ term }}</span>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+</div>

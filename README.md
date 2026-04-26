@@ -10,7 +10,7 @@ The goal of the project is not just detection, but **explainability** — every 
 
 ## 🌐 Live Demo
 
-- **Frontend (Vercel):** https://threatlens.vercel.app  
+- **Frontend (Vercel):** https://threatlens-self.vercel.app  
 - **Backend API (Render):** https://threatlens-0q7f.onrender.com  
 
 ---

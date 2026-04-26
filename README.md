@@ -1,221 +1,192 @@
 # ThreatLens
 
-ThreatLens is a lightweight full-stack cybersecurity web application built to demonstrate practical security analysis through a clean web interface. It combines focused security utilities into a single dashboard, making it useful as both a portfolio project and a foundation for expanding into a broader security toolkit.
+> Analyze tokens, detect phishing, and translate security findings into plain English.
 
-The project currently includes:
+ThreatLens is a full-stack cybersecurity web application that helps users analyze and understand common security artifacts such as JWTs, URLs, and vulnerability findings.
 
-- `JWT Inspector` for decoding JSON Web Tokens, reviewing claims, and checking common security signals
-- `URL Phishing Analyzer` for flagging suspicious URLs, risky patterns, and deceptive structure
-- `Finding Translator` as a planned feature for rewriting security findings for different audiences
+The goal of the project is not just detection, but **explainability** — every result includes reasoning so users can understand *why* something is risky, not just that it is.
 
-## Why This Project
+---
 
-ThreatLens was designed to showcase:
+## 🌐 Live Demo
 
-- Full-stack application development
-- Practical cybersecurity-focused logic
-- API design and frontend integration
-- Clear presentation of technical findings
+- **Frontend (Vercel):** https://threatlens.vercel.app  
+- **Backend API (Render):** https://threatlens-0q7f.onrender.com  
 
-## Tech Stack
+---
+
+## ⭐ Highlights
+
+- Full-stack application using Angular and Spring Boot (Kotlin)
+- Deployed across Vercel (frontend) and Render (backend)
+- Focus on **explainable security analysis**, not just raw outputs
+- Custom heuristics for phishing detection and JWT validation
+- Designed to be useful for both technical and non-technical users
+
+---
+
+## 🚀 Features
+
+### 🔐 JWT Inspector
+
+Analyze JSON Web Tokens and identify potential issues.
+
+- Decodes header and payload
+- Surfaces important claims:
+  - `alg`, `exp`, `iat`, `iss`, `aud`
+- Detects insecure configurations, such as `alg: none`
+- Optional signature verification:
+  - HS256
+  - HS384
+  - HS512
+
+Useful for debugging authentication issues and identifying weak token configurations.
+
+---
+
+### 🌐 URL Phishing Analyzer
+
+Evaluates URLs for common phishing and malicious patterns using heuristic checks.
+
+Detection includes:
+
+- HTTPS usage
+- IP-based domains
+- Suspicious keywords, such as login, verify, and secure
+- Subdomain depth
+- Risky TLDs, such as `.xyz`, `.top`, `.zip`, and `.ru`
+- Brand impersonation patterns
+- Hyphen-heavy domains
+
+Returns a risk score with detailed explanations for each flag.
+
+---
+
+### 🧠 Findings Translator
+
+Converts raw security findings into clear, human-readable explanations.
+
+- Translates technical vulnerability language into actionable insights
+- Helps non-security stakeholders understand risk and impact
+- Useful for reports, handoffs, and documentation
+
+---
+
+## 🏗️ Architecture
+
+```text
+Angular Frontend (Vercel)
+        ↓ REST API
+Spring Boot Backend (Render)
+        ↓
+Security Analysis Logic
+```
+
+- Frontend communicates with the backend via REST APIs
+- Environment-based configuration is used for API URLs:
+  - Local: `http://localhost:8080`
+  - Production: Render deployment
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
 
-- Angular 21
+- Angular
 - TypeScript
-- SCSS
-- Bun for package management
+- RxJS
+- Vercel
 
 ### Backend
 
 - Kotlin
-- Spring Boot 4
-- Gradle
-- Java 21
+- Spring Boot
+- REST APIs
+- Render
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```text
 threatlens/
+├── frontend/
+│   └── threatlens-ui/
+│       ├── src/app/
+│       │   ├── components/
+│       │   ├── services/
+│       │   └── ...
+│       └── environments/
+│
 ├── backend/
 │   └── threatlens-api/
-└── frontend/
-    └── threatlens-ui/
+│       ├── jwt/
+│       ├── url/
+│       ├── findings/
+│       └── ...
 ```
 
-## Current Features
+---
 
-### JWT Inspector
-
-The JWT Inspector accepts a token and returns a structured analysis of:
-
-- Header and payload contents
-- Signing algorithm
-- Expiration and issued-at claims
-- Issuer and audience claims
-- Optional HMAC signature verification when a secret is provided
-- Human-readable findings that summarize risk and token quality
-
-### URL Phishing Analyzer
-
-The URL analyzer checks a submitted URL for common phishing indicators, including:
-
-- Missing HTTPS
-- IP-based hosts
-- Suspicious keywords such as `login`, `verify`, and `password`
-- Excessive subdomains
-- A simple risk score with supporting findings
-
-### Planned: Finding Translator
-
-The next planned tool is a finding translator that can rewrite security issues for different audiences, such as executives, engineers, customers, or compliance reviewers.
-
-## API Endpoints
-
-The backend currently exposes:
-
-```http
-GET /api/health
-POST /api/jwt/analyze
-POST /api/url/analyze
-```
-
-Example JWT request:
-
-```json
-{
-  "token": "<JWT_TOKEN>",
-  "secret": "optional-shared-secret"
-}
-```
-
-Example URL request:
-
-```json
-{
-  "url": "https://example.com"
-}
-```
-
-## Running Locally
+## ⚙️ Running Locally
 
 ### Backend
 
-From `backend/threatlens-api`:
-
 ```bash
+cd backend/threatlens-api
 ./gradlew bootRun
 ```
 
-On Windows:
+The backend runs on:
 
-```powershell
-.\gradlew.bat bootRun
+```text
+http://localhost:8080
 ```
-
-The API will run on `http://localhost:8080`.
 
 ### Frontend
 
-From `frontend/threatlens-ui`:
-
 ```bash
-bun install
-bun run start
+cd frontend/threatlens-ui
+npm install
+ng serve
 ```
 
-The frontend will run on `http://localhost:4200`.
+The frontend runs on:
 
-## Deployment
-
-### Frontend Deployment
-
-The frontend is a good fit for Vercel or Netlify.
-
-Recommended flow:
-
-1. Build the Angular app from `frontend/threatlens-ui`
-2. Publish the production build output
-3. Point the frontend to the deployed backend API URL
-
-Typical production build:
-
-```bash
-bun run build
+```text
+http://localhost:4200
 ```
 
-Important note: the frontend services currently call `http://localhost:8080` directly. Before deploying, move that API base URL into environment configuration or update it to your production backend URL.
+---
 
-### Backend Deployment
+## 🔧 Environment Configuration
 
-The backend is a good fit for Render, Railway, or Fly.io.
+The frontend uses Angular environment files:
 
-Recommended flow:
+- `environment.ts` → local development
+- `environment.prod.ts` → production
 
-1. Deploy the Spring Boot app from `backend/threatlens-api`
-2. Use Java 21 in the runtime environment
-3. Build with Gradle and expose the assigned HTTP port
-4. Update CORS settings to allow your deployed frontend origin
+Example:
 
-Typical production build:
-
-```bash
-./gradlew build
+```ts
+export const environment = {
+  apiUrl: 'http://localhost:8080'
+};
 ```
 
-For local development, CORS currently allows `http://localhost:4200`. In production, update the allowed origin in `backend/threatlens-api/src/main/kotlin/com/threatlens/api/WebConfig.kt`.
+---
 
-## Sharing a Demo with ngrok
+## 🔮 Future Improvements
 
-If you want to share the app quickly without a full deployment, `ngrok` is a simple option.
+- Expand JWT support to include RSA/RS256 verification
+- Integrate external threat intelligence sources
+- Support exporting or sharing analysis results
+- Improve UI for visualization and workflows
 
-### Option 1: Share the frontend only
+---
 
-Run the frontend locally:
+## 👤 Author
 
-```bash
-ngrok http 4200
-```
-
-This is useful if your backend is already deployed somewhere public.
-
-### Option 2: Share the backend only
-
-Run the backend locally:
-
-```bash
-ngrok http 8080
-```
-
-This is useful for testing the API remotely with tools like Postman or a deployed frontend.
-
-### Option 3: Share both for a full local demo
-
-Run both services locally and expose each with its own tunnel:
-
-```bash
-ngrok http 4200
-ngrok http 8080
-```
-
-If you do this, make sure:
-
-- The frontend is configured to call the public backend `ngrok` URL
-- The backend CORS settings allow the frontend `ngrok` domain
-
-For the cleanest public demo, the most reliable setup is usually:
-
-- Deploy the backend once
-- Tunnel only the frontend during development
-
-## Roadmap
-
-- Add the Finding Translator feature
-- Improve production configuration for API base URLs
-- Expand analysis depth and scoring logic
-- Add tests around security analysis behavior
-- Improve deployment readiness and environment configuration
-
-## Author
-
-Built by Mo Russolillo as a cybersecurity-focused full-stack demonstration project.
+**Mo Russolillo**  
+GitHub: https://github.com/morusso15
